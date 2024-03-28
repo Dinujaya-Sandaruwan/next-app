@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
@@ -26,6 +26,8 @@ const NavBar = () => {
           >
             Services
           </Link>
+
+          <button onClick={() => signIn("google")}>Sign in with Google</button>
           {status === "loading" && <span>Loading...</span>}
           {status === "unauthenticated" && (
             <Link
@@ -35,7 +37,14 @@ const NavBar = () => {
               Sign In
             </Link>
           )}
-          {status === "authenticated" && <span>{session?.user!.name}</span>}
+          {status === "authenticated" && (
+            <span>
+              {session?.user!.name}{" "}
+              <Link href="/api/auth/signout?callbackUrl=/goodbye">
+                Sign Out
+              </Link>
+            </span>
+          )}
         </div>
       </div>
     </nav>
